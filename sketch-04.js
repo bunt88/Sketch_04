@@ -1,13 +1,16 @@
 const canvasSketch = require('canvas-sketch');
 const random = require('canvas-sketch-util/random');
 const math = require('canvas-sketch-util/math');
+const Tweakpane = require('tweakpane');
+
 
 const settings = {
-  dimensions: [ 1080, 1080 ]
+  dimensions: [ 1080, 1080 ],
+  animate: true
 };
 
 const sketch = () => {
-  return ({ context, width, height }) => {
+  return ({ context, width, height, frame }) => {
     context.fillStyle = 'white';
     context.fillRect(0, 0, width, height);
 
@@ -31,11 +34,12 @@ const sketch = () => {
       const w = cellw * 0.8;
       const h = cellh * 0.8;
 
-      const n = random.noise2D(x, y, 0.001);
+      const n = random.noise2D(x + frame * 10, y, 0.001);
       const angle = n * Math.PI * 0.2;
 
       // const scale = (n + 1) / 2 * 30;
-      const scale = (n * 0.5 + 0.5) * 30;
+      // const scale = (n * 0.5 + 0.5) * 30;
+      const scale = math.mapRange(n, -1, 1, 1, 30);
 
       context.save();
       context.translate(x, y);
